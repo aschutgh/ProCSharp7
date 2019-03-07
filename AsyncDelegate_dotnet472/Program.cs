@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Threading;
 
-namespace SyncDelegateReview
+namespace ASyncDelegate_dotnet472
 {
-    public delegate int BinaryOp(int x, int y);
     class Program
     {
+
+        public delegate int BinaryOp(int x, int y);
+
 
         static void Main(string[] args)
         {
@@ -15,10 +21,7 @@ namespace SyncDelegateReview
             Thread.CurrentThread.ManagedThreadId);
             // Invoke Add() on a secondary thread.
             BinaryOp b = new BinaryOp(Add);
-            //IAsyncResult ar = b.BeginInvoke(10, 10, null, null);
-            // Apparently not supported on .net core
-            // See project AsyncDelegate_dotnet472
-            IAsyncResult ar = b.BeginInvoke(10, 10, null, null); // not supported on .net core
+            IAsyncResult ar = b.BeginInvoke(10, 10, null, null);
             // Do other work on primary thread...
             Console.WriteLine("Doing more work in Main()!");
             // Obtain the result of the Add()
@@ -27,6 +30,8 @@ namespace SyncDelegateReview
             Console.WriteLine("10 + 10 is {0}.", answer);
             Console.ReadLine();
         }
+
+
         static int Add(int x, int y)
         {
             // Print out the ID of the executing thread.
@@ -36,5 +41,8 @@ namespace SyncDelegateReview
             Thread.Sleep(5000);
             return x + y;
         }
+
+
+
     }
 }
